@@ -12,6 +12,19 @@ def sentence_print():
     print ('6. 프로그램 종료')
     print (' * 원하는 항목의 숫자를 입력하여 주세요.\n')
     
+# 아파트 매물 정보 출력 함수
+def houseinfo_print(*format):
+    print ('\n[아파트 매물 정보]\n')
+    arr = format                            
+    aptprice = str(arr[0][6] * 0.0001) + "억원"
+    print ('- 동네: ' + arr[0][0])
+    print ('- 아파트명: ' + arr[0][2])
+    print ('- 층: ' + arr[0][7])
+    print ('- 면적: ' + arr[0][3])
+    print ('- 가격: ' + aptprice)
+    print ('- 계약년월: ' + arr[0][4])
+    print ('- 건축년도: ' + arr[0][8] +'\n')
+    return arr
 
 filename = "abc.xlsx"
 filedata = openpyxl.load_workbook(filename)
@@ -32,21 +45,24 @@ for row in detaildata.rows:
         row[9].value
     ])
 
-print(data)
-
-
 while True:
     sentence_print()
     inputnumber = input('입력란: ')
     if inputnumber == '1':
       search = input('검색할 동을 입력해주세요. ex: 역삼동, 방배동\n')
-
+      for format in data:
+        if search in format[0]:
+            houseinfo_print(format)
     elif inputnumber == '2':
       search = input('검색할 아파트명을 입력해주세요. ex: 레미안, 청솔\n')
-
+      for format in data:
+         if search in format[2]:
+            houseinfo_print(format)
     elif inputnumber == '3':
       search = input('검색할 실거래가 미만을 입력해주세요. ex: 200000000, 300000000\n')
-
+      for format in data:
+         if int(search) > int(format[6])*10000:  
+            houseinfo_print(format)
     elif inputnumber == '4':                    
       search = input('검색할 아파트명을 입력해주세요. ex: 레미안, 청솔\n')
 
