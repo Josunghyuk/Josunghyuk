@@ -1,5 +1,6 @@
 #프로그래밍언어 프로그램 개발
 import openpyxl
+import random
 
 # 안내문장 출력 함수
 def sentence_print():
@@ -11,7 +12,15 @@ def sentence_print():
     print ('5. 랜덤 매물 추천')
     print ('6. 프로그램 종료')
     print (' * 원하는 항목의 숫자를 입력하여 주세요.\n')
-    
+
+# 랜덤항목 안내문장 출력 함수
+def random_sentence_print():
+    print ('[랜덤 조건 선택]\n')
+    print ('1. 동네 랜덤 검색')
+    print ('2. 아파트명 랜덤 검색')
+    print ('3. 실거래가 랜덤 검색')
+    print (' * 원하는 항목의 숫자를 입력하여 주세요.\n')
+
 # 아파트 매물 정보 출력 함수
 def houseinfo_print(*format):
     print ('\n[아파트 매물 정보]\n')
@@ -25,6 +34,68 @@ def houseinfo_print(*format):
     print ('- 계약년월: ' + arr[0][4])
     print ('- 건축년도: ' + arr[0][8] +'\n')
     return arr
+
+# 랜덤기능에 대한 조건별 함수
+def random_function(inputnumber):
+    copydict={}
+    copyformat=[]
+    #global apt_cnt
+    if inputnumber == 1:
+        search = input('검색할 동을 입력해주세요. ex: 역삼동, 방배동\n')
+        apt_cnt=0
+        for format in data:
+          if search in format[0]:
+            copydict[apt_cnt] = {apt_cnt: format[:]} #딕셔너리 내 리스트 복사
+            apt_cnt=apt_cnt+1
+
+        if apt_cnt == 0:
+           print('조회 결과가 없습니다.\n')
+        elif apt_cnt == 1:
+           i = 0
+        else:
+           i = random.randrange(0, apt_cnt-1) #배열의 순서는 0부터 시작되기에 -1 진행, ex: 아파트 매물이 3개일 때 배열은 0~2까지 저장
+        
+        copyformat= list(copydict[i].values())       
+        print('★총 매물 개수: ' + str(apt_cnt) + '★')
+        houseinfo_print(copyformat[0])
+
+    elif inputnumber == 2:
+        search = input('검색할 아파트명을 입력해주세요. ex: 레미안, 청솔\n')
+        apt_cnt=0
+        for format in data:
+          if search in format[2]:
+            copydict[apt_cnt] = {apt_cnt: format[:]}
+            apt_cnt=apt_cnt+1
+            
+        if apt_cnt == 0:
+           print('조회 결과가 없습니다.\n')
+        elif apt_cnt == 1:
+           i = 0
+        else:
+           i = random.randrange(0, apt_cnt-1) #배열의 순서는 0부터 시작되기에 -1 진행, ex: 아파트 매물이 3개일 때 배열은 0~2까지 저장
+        
+        copyformat= list(copydict[i].values())       
+        print('★총 매물 개수: ' + str(apt_cnt) + '★')
+        houseinfo_print(copyformat[0])
+
+    elif inputnumber ==3:
+        search = input('검색할 실거래가 미만을 입력해주세요. ex: 200000000, 300000000\n')
+        apt_cnt=0
+        for format in data:
+          if int(search) > int(format[6])*10000:  
+            copydict[apt_cnt] = {apt_cnt: format[:]}
+            apt_cnt=apt_cnt+1
+                
+        if apt_cnt == 0:
+           print('조회 결과가 없습니다.\n')
+        elif apt_cnt == 1:
+           i = 0
+        else:
+           i = random.randrange(0, apt_cnt-1) #배열의 순서는 0부터 시작되기에 -1 진행, ex: 아파트 매물이 3개일 때 배열은 0~2까지 저장
+        
+        copyformat= list(copydict[i].values())       
+        print('★총 매물 개수: ' + str(apt_cnt) + '★')
+        houseinfo_print(copyformat[0])
 
 filename = "abc.xlsx"
 filedata = openpyxl.load_workbook(filename)
@@ -66,9 +137,18 @@ while True:
     elif inputnumber == '4':                    
       search = input('검색할 아파트명을 입력해주세요. ex: 레미안, 청솔\n')
 
-    elif inputnumber == '5':                    
-      search = input('구상중\n')        
-
+    elif inputnumber == '5':  
+      random_sentence_print()
+      randominputnumber = input('입력란: ')   
+      if randominputnumber == '1':
+        random_function(1)
+      elif randominputnumber == '2':
+        random_function(2)
+      elif randominputnumber == '3':         
+        random_function(3)
+      else:
+        print('조건에 없는 숫자입니다!\n')
+        print('*******************************\n')
     elif inputnumber == '6':
       print ('종료 완료')
       break
